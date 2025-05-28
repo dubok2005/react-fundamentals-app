@@ -1,33 +1,57 @@
 .container {
 	display: flex;
 	flex-direction: column;
+	align-items: center;
+	padding: 24px;
 }
 
 .courseInfo {
-	margin-top: 20px;
-	padding: 20px;
+	margin-top: 24px;
+	padding: 24px 32px;
 	display: flex;
-	gap: 50px;
-	border-radius: 4px;
+	flex-wrap: wrap;
+	justify-content: space-between;
+	gap: 32px;
+	border-radius: 8px;
 	border: 1px solid #cfcfcf;
-	background: #fff;
+	background-color: #fff;
+	width: 100%;
+	max-width: 960px;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.description {
+	flex: 1;
+	min-width: 280px;
+	padding-right: 24px;
+	border-right: 1px solid #cfcfcf;
 }
 
 .authorsList {
 	list-style: none;
 	padding-left: 0;
-}
-
-.description {
-	width: 60%;
-	border-right: 1px solid #cfcfcf;
+	margin: 0;
+	flex: 1;
+	min-width: 240px;
 }
 
 p {
+	margin-bottom: 12px;
 	padding-bottom: 0;
 }
 
 .backButton {
-  align-self: flex-end;
-  margin-top: 30px;
+	margin-top: 24px;
+	padding: 12px 24px;
+	background-color: #007298; 
+	border: 2px solid #007298;
+	border-radius: 8px;
+	color: #fff; /* белый текст */
+	font-weight: bold;
+	font-size: 14px;
+	cursor: pointer;
+	transition: all 0.2s ease-in-out;
+	text-decoration: none; 
+	display: inline-block;
+	text-align: center;
 }

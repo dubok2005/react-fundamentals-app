@@ -14,7 +14,7 @@
 // // ** TASK DESCRIPTION ** - https://react-fundamentals-tasks.vercel.app/docs/module-2/home-task/components#add-new-course
 
 // // Module 3.
-// // * remove props - authorsList, createCourse, createAuthor 
+// // * remove props - authorsList, createCourse, createAuthor
 // // * use selector from store/selectors.js to get authorsList from store
 // // * save new course to the store. Use action 'saveCourse' from 'src/store/slices/coursesSlice'
 // // * save new author to the store. Use action 'saveAuthor' from 'src/store/slices/authorsSlice'
@@ -45,67 +45,165 @@
 // //   **  CourseForm 'Create author' button click should call dispatch.
 // //   **  CourseForm 'Add author' button click should add an author to the course authors list.
 // //   **  CourseForm 'Delete author' button click should delete an author from the course list.
+import React, { useState } from "react";
+import styles from "./styles.module.css";
+import { Input, Button } from "../../common";
+import { getCourseDuration } from "../../helpers";
+import { AuthorItem } from "./components/AuthorItem/AuthorItem";
+import { CreateAuthor } from "./components/CreateAuthor/CreateAuthor";
 
-// import React from "react";
+export const CourseForm = ({ authorsList, createCourse, createAuthor }) => {
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [duration, setDuration] = useState("");
+  const [availableAuthors, setAvailableAuthors] = useState(authorsList);
+  const [courseAuthors, setCourseAuthors] = useState([]);
 
-// import styles from "./styles.module.css";
+  const handleCreateAuthor = (newAuthor) => {
+    setAvailableAuthors([...availableAuthors, newAuthor]);
+    createAuthor(newAuthor);
+  };
 
-// export const CourseForm = ({ authorsList, createCourse, createAuthor }) => {
-//   //write your code here
+  const handleCreateCourse = (e) => {
+    e.preventDefault();
 
-//   return (
-//     <div className={styles.container}>
+    if (
+      title.trim().length < 2 ||
+      description.trim().length < 2 ||
+      Number(duration) <= 0 ||
+      courseAuthors.length === 0
+    ) {
+      alert("All fields must be valid and filled in.");
+      return;
+    }
 
-//       <h2>// render title - Course edit or Create page</h2>
+    const newCourse = {
+      id: String(Date.now()),
+      title,
+      description,
+      creationDate: new Date().toLocaleDateString("en-GB"),
+      duration: Number(duration),
+      authors: courseAuthors.map((a) => a.id),
+    };
 
-//       <form>
+    createCourse(newCourse);
+    setTitle("");
+    setDescription("");
+    setDuration("");
+    setCourseAuthors([]);
+    setAvailableAuthors(authorsList);
+  };
 
-//         // reuse Input component for title field with data-testid="titleInput"
+  const addAuthorToCourse = (author) => {
+    setAvailableAuthors((prev) => prev.filter((a) => a.id !== author.id));
+    setCourseAuthors((prev) => [...prev, author]);
+  };
 
-//         <label>
-//           Description
-//           <textarea
-//             className={styles.description}
-//             data-testid="descriptionTextArea"
-//           />
-//         </label>
+  const removeAuthorFromCourse = (author) => {
+    setCourseAuthors((prev) => prev.filter((a) => a.id !== author.id));
+    setAvailableAuthors((prev) => [...prev, author]);
+  };
 
-//         <div className={styles.infoWrapper}>
-//           <div>
+  return (
+    <div className={styles.container}>
+      <h2 className={styles.pageTitle}>Course Edit/Create Page</h2>
+      <form
+        onSubmit={handleCreateCourse}
+        className={styles.form}
+        data-testid="courseForm"
+      >
+        <div className={styles.fieldGroup}>
+          <Input
+            labelText="Title"
+            name="title"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            placeholderText="Enter course title"
+            data-testid="titleInput"
+          />
+        </div>
 
-//             <div className={styles.duration}>
-//               // reuse Input component with data-testid='durationInput' for duration field
+        <div className={styles.fieldGroup}>
+          <label htmlFor="description" className={styles.label}>
+            Description
+          </label>
+          <textarea
+            id="description"
+            className={styles.textarea}
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            data-testid="descriptionTextArea"
+          />
+        </div>
 
-//               <p>// render duration. use getCourseDuration helper</p>
-//             </div>
+        <div className={styles.columns}>
+          <section className={styles.leftColumn}>
+            <Input
+              labelText="Duration"
+              name="duration"
+              type="number"
+              min="1"
+              value={duration}
+              onChange={(e) => setDuration(e.target.value)}
+              placeholderText="Enter duration in minutes"
+              data-testid="durationInput"
+            />
+            <div className={styles.durationOutput}>
+              {getCourseDuration(Number(duration))} hours
+            </div>
 
-//             <h2>Authors</h2>
-//             // use CreateAuthor component
+            <div className={styles.authorsSection}>
+              <h3>Create Author</h3>
+              <CreateAuthor onCreateAuthor={handleCreateAuthor} />
 
-//             <div className={styles.authorsContainer}>
-//               <h3>Authors List</h3>
+              <h4 className={styles.subTitle}>Available Authors</h4>
+              {availableAuthors.length ? (
+                availableAuthors.map((author) => (
+                  <AuthorItem
+                    key={author.id}
+                    name={author.name}
+                    buttonText="Add author"
+                    onClick={() => addAuthorToCourse(author)}
+                    testId="addAuthor"
+                  />
+                ))
+              ) : (
+                <p className={styles.notification}>No available authors</p>
+              )}
+            </div>
+          </section>
 
-//               // use 'map' to display all available autors. Reuse 'AuthorItem' component for each author
-//             </div>
+          <section className={styles.rightColumn}>
+            <h3>Course Authors</h3>
+            {courseAuthors.length ? (
+              courseAuthors.map((author) => (
+                <AuthorItem
+                  key={author.id}
+                  name={author.name}
+                  buttonText="Delete author"
+                  onClick={() => removeAuthorFromCourse(author)}
+                  testId="deleteAuthor"
+                />
+              ))
+            ) : (
+              <p className={styles.notification}>Author list is empty</p>
+            )}
+          </section>
+        </div>
 
-//           </div>
-
-//           <div className={styles.courseAuthorsContainer}>
-//             <h2>Course authors</h2>
-//             // use 'map' to display course autors. Reuse 'AuthorItem' component for each author
-//             <p className={styles.notification}>List is empty</p> // display this
-//             paragraph if there are no authors in the course
-//           </div>
-
-//         </div>
-
-//       </form>
-
-//       <div className={styles.buttonsContainer}>
-//         // reuse Button component for 'CREATE/UPDATE COURSE' button with
-//         // reuse Button component for 'CANCEL' button with
-//       </div>
-
-//     </div>
-//   );
-// };
+        <div className={styles.buttonsContainer}>
+          <Button
+            buttonText="Cancel"
+            handleClick={() => window.history.back()}
+            data-testid="cancelButton"
+          />
+          <Button
+            type="submit"
+            buttonText="Create Course"
+            data-testid="createCourseButton"
+          />
+        </div>
+      </form>
+    </div>
+  );
+};

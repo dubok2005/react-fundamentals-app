@@ -1,5 +1,28 @@
 .panel {
   display: flex;
-  justify-content: flex-end;
-  margin: 16px 0;
+  justify-content: center;
+  margin: 20px 0;
+  gap: 12px;
+}
+
+.empty {
+  text-align: center;
+  margin-top: 50px;
+  font-size: 16px;
+  color: #666;
+}
+
+.buttonContainer {
+  display: flex;
+  justify-content: center; 
+  margin-top: 24px;
+}
+
+.noUnderline {
+  text-decoration: none;
+  color: inherit; 
+}
+
+.noUnderline:hover {
+  text-decoration: underline;
 }

@@ -1,23 +1,30 @@
 .container {
-	width: 585px;
-	margin: 0 auto;
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
 	display: flex;
-	justify-content: center;
 	flex-direction: column;
-}
-
-.container h1 {
-	text-align: center;
+	align-items: center;
+	width: 100%;
 }
 
 .formContainer {
-	padding: 95px 150px 45px;
 	background-color: #fff;
+	padding: 50px 60px;
+	border: 1px solid #ccc;
+	box-shadow: none;
+	text-align: left;
 }
 
 .formContainer input,
 .formContainer button {
-  width: 100%;
-	max-width: 254px;
-	margin-bottom: 20px;
+	width: 100%;
+	max-width: 240px;
+	margin-bottom: 14px;
+	padding: 8px 10px;
+	border: 1px solid #999;
+	border-radius: 0;
+	font-size: 14px;
+	box-shadow: none;
 }

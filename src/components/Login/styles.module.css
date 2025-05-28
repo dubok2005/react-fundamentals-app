@@ -1,23 +1,59 @@
 .container {
-	width: 585px;
-	margin: 0 auto;
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
 	display: flex;
-	justify-content: center;
 	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	padding: 20px;
 }
 
 .container h1 {
+	margin-bottom: 25px;
 	text-align: center;
+	font-size: 24px;
+	font-weight: 600;
 }
 
 .formContainer {
-	padding: 95px 150px 45px;
 	background-color: #fff;
+	border: 1px solid #ccc;
+	padding: 40px 50px;
+	width: 320px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	box-shadow: none;
 }
 
 .formContainer input,
 .formContainer button {
 	width: 100%;
-	max-width: 254px;
-	margin-bottom: 20px;
+	margin-bottom: 16px;
+	padding: 10px 12px;
+	border: 1px solid #555;
+	border-radius: 0; /* строгі кути */
+	font-size: 14px;
+	box-sizing: border-box;
+}
+
+.formContainer button {
+	background-color: #007298;
+	color: #fff;
+	cursor: pointer;
+	border: none;
+	transition: background-color 0.2s ease;
+}
+
+.formContainer button:hover {
+	background-color: #005f7a;
+}
+
+.formContainer p {
+	margin-top: 10px;
+	font-size: 13px;
+	text-align: center;
 }

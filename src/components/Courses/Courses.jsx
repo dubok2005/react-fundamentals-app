@@ -1,7 +1,3 @@
-import React from "react";
-
-import styles from "./styles.module.css";
-
 // Module 1:
 // * render list of components using 'CourseCard' component for each course
 // * render 'ADD NEW COURSE' button (reuse Button component)
@@ -31,19 +27,51 @@ import styles from "./styles.module.css";
 // * proposed cases for unit tests:
 //   ** Courses should display amount of CourseCard equal length of courses array.
 //   ** CourseForm should be shown after a click on the "Add new course" button.
+import React, { useEffect } from "react";
+import styles from "./styles.module.css";
+import { Button } from "../../common";
+import { CourseCard } from "./components";
+import { Link, useNavigate } from "react-router-dom";
 
-export const Courses = ({ coursesList, authorsList, handleShowCourse }) => {
-  // write your code here
+export const Courses = ({ coursesList, authorsList }) => {
+  const navigate = useNavigate();
 
-  // for EmptyCourseList component container use data-testid="emptyContainer" attribute
-  // for button in EmptyCourseList component add data-testid="addCourse" attribute
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      navigate("/login");
+    }
+  }, [navigate]);
+
+  if (coursesList.length === 0) {
+    return <EmptyCourseList />;
+  }
 
   return (
     <>
       <div className={styles.panel}>
-        // reuse Button component for 'ADD NEW COURSE' button
+        <Link to="/courses/add" className={styles.noUnderline}>
+          <Button buttonText="ADD NEW COURSE" data-testid="addCourse" />
+        </Link>
       </div>
-      // use '.map' array method to render all courses. Use CourseCard component
+
+      {coursesList.map((course) => (
+        <CourseCard key={course.id} course={course} authorsList={authorsList} />
+      ))}
     </>
+  );
+};
+
+const EmptyCourseList = () => {
+  return (
+    <div className={styles.empty} data-testid="emptyContainer">
+      <h2>Your List Is Empty</h2>
+      <p>Please use "add new course" button to add your first course</p>
+      <div className={styles.buttonContainer}>
+        <Link to="/courses/add" className={styles.noUnderline}>
+          <Button buttonText="ADD NEW COURSE" data-testid="addCourse" />
+        </Link>
+      </div>
+    </div>
   );
 };
